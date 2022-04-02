@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.app.custom_exceptions.WongInputException;
+import com.app.custom_exceptions.WrongInputException;
 import com.app.dto.ErrorResponse;
 
 @ControllerAdvice // Mandatory annotation to tell SC , following class will contain 
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		Client error responses (400–499)
 		Server error responses (500–599) */
 	
-	@ExceptionHandler(WongInputException.class)
+	@ExceptionHandler(WrongInputException.class)
 	public ResponseEntity<?> handleWongInputException(RuntimeException e)
 	{
 		ErrorResponse resp=new ErrorResponse(e.getMessage(),LocalDateTime.now());

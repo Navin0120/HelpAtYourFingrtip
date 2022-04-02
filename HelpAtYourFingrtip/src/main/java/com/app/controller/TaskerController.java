@@ -43,8 +43,8 @@ public class TaskerController {
 	public ResponseEntity<?> processTaskerLoginForm(@RequestBody Tasker tasker,
 													HttpSession session){
 		Tasker task =  taskerService.authenticateTasker(tasker.getEmail(), tasker.getPassword()); 
-		session.setAttribute("user_details", task);// store it under session scope (till logout)
-		return ResponseEntity.ok().body("Login Successful");
+		session.setAttribute("tasker_details", task);// store it under session scope (till logout)
+		return ResponseEntity.ok().body(task);
 	}
 	@GetMapping("/{taskerId}")
 	public ResponseEntity<?> getTaskerDetails(@PathVariable int taskerId) {

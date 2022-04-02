@@ -1,12 +1,12 @@
 package com.app.custom_exceptions;
 
-public class WongInputException extends RuntimeException {
+public class WrongInputException extends RuntimeException {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public WongInputException(String message)
+	public WrongInputException(String message)
 	{
 		super(message);
 	}

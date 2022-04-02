@@ -1,5 +1,8 @@
 package com.app.controller;
 
+import javax.servlet.http.HttpSession;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -40,5 +43,13 @@ public class CustomerController {
 	@GetMapping (value="/payment/{id}")
 	public ResponseEntity<?> getJobDetails(@PathVariable int id){
 		return ResponseEntity.status(HttpStatus.OK).body(jobService.getJobByCustomerAndStatus(id));
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> processCustomerLoginForm(@RequestBody Customer customer,
+													HttpSession session){
+		Customer cust =  cusService.authenticateCustomer(customer.getEmail(), customer.getPassword()); 
+		session.setAttribute("customer_details", cust);// store it under session scope (till logout)
+		return ResponseEntity.ok().body(cust);
 	}
 }
