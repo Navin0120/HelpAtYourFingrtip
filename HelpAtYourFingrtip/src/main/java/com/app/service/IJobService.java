@@ -2,7 +2,6 @@ package com.app.service;
 
 import java.util.List;
 
-
 import com.app.dto.JobStatusDTO;
 import com.app.pojos.Job;
 
