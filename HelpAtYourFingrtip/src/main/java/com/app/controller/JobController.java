@@ -19,8 +19,8 @@ import com.app.service.IJobService;
 import com.app.service.ITaskerService;
 
 @RestController
+@CrossOrigin(origins="http://localhost:3000/")
 @RequestMapping("/job")
-@CrossOrigin(origins="http://localhost:3001/")
 public class JobController {
 	@Autowired
 	private IJobService jobService;
