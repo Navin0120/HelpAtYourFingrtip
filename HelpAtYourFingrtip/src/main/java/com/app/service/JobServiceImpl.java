@@ -5,6 +5,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.app.custom_exceptions.WrongInputException;
@@ -12,8 +14,10 @@ import com.app.dao.ICustomerRepository;
 import com.app.dao.IJobRepository;
 import com.app.dao.ITaskerRepository;
 import com.app.dto.JobStatusDTO;
+import com.app.pojos.Customer;
 import com.app.pojos.Job;
 import com.app.pojos.JobStatus;
+import com.app.pojos.Tasker;
 
 
 @Service
@@ -25,6 +29,8 @@ public class JobServiceImpl implements IJobService {
 	private ICustomerRepository custDao;
 	@Autowired
 	private ITaskerRepository taskerDao;
+	@Autowired
+	private JavaMailSender sender;
 	@Override
 	public Job insertJobDetails(Job job,int taskerId,int custId) {
 		job.setCustomer(custDao.findById(custId)
@@ -33,11 +39,16 @@ public class JobServiceImpl implements IJobService {
 				.orElseThrow(() -> new WrongInputException("Tasker Id Not Found")));
 		return jobDao.save(job);
 	}
+	
 	@Override
 	public void updateJobStatus(JobStatusDTO status) {
 		Job job = jobDao.findById(status.getJobId())
 				.orElseThrow(() -> new WrongInputException("Job Id Not Found"));
 		job.setJobStatus(status.getStatus());
+		if(status.getStatus() == JobStatus.PENDING)
+			sendMail(status.getJobId(),"Task Accepted");
+		if(status.getStatus() == JobStatus.REJECTED)
+			sendMail(status.getJobId(),"Task Rejected");
 	}
 	@Override
 	public void updateJobStartTime(int jobId) {
@@ -67,5 +78,24 @@ public class JobServiceImpl implements IJobService {
 	@Override
 	public List<Job> getJobByCustomerAndStatus(int custId) {
 		return jobDao.getJobDetailsByCustomerAndStatus(custId,JobStatus.COMPLETED,false);
+	}
+	
+	public void sendMail(int jobId,String subject)
+	{
+		SimpleMailMessage mesg=new SimpleMailMessage();
+		Job job = jobDao.findById(jobId)
+				.orElseThrow(() -> new WrongInputException("Job Id Not Found"));
+		Tasker tasker = taskerDao.findById(job.getTasker().getId())
+				.orElseThrow(() -> new WrongInputException("Tasker Id not Found"));
+		Customer customer = custDao.findById(job.getCustomer().getId())
+				.orElseThrow(() -> new WrongInputException("Customer Id not Found"));
+		mesg.setText(subject+"\n"
+				+"Task Date :"+job.getJobDate()+"\n"
+				+"Task Details :"+job.getJobDetails()+"\n"
+				+"Tasker Name:"+tasker.getFirstName()+" "+tasker.getLastName()+"\n"
+				+"Tasker Contact No:"+tasker.getContactNo());
+		mesg.setSubject(subject);
+		mesg.setTo(customer.getEmail());
+		sender.send(mesg);
 	}
 }
