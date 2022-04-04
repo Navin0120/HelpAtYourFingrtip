@@ -30,7 +30,7 @@ import com.app.service.ITaskerService;
 
 @RestController
 @RequestMapping("/tasker")
-@CrossOrigin(origins="http://localhost:30001/")
+@CrossOrigin(origins="http://localhost:3000/")
 public class TaskerController {
 	@Autowired
 	private ITaskerService taskerService;
