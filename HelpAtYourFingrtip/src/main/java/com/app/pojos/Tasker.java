@@ -59,8 +59,6 @@ public class Tasker extends BaseEntity {
 	@Column(length=20)
 	private String city;
 
-	@NotBlank(message="Address should not be blank")
-	private String address;
 	
 	@NotBlank(message = "Contact No can't be blank")
 	@Column(length=12)
@@ -69,7 +67,7 @@ public class Tasker extends BaseEntity {
 
 	private double overallRating;
 	private String bio;
-
+	private String image;
 	@ElementCollection(fetch=FetchType.EAGER) //Skills are very few , so we can fetch it eagerly
 	@CollectionTable(name = "skills", joinColumns = @JoinColumn(name = "tasker_id"))
 	List<Skill> services = new ArrayList<>();
