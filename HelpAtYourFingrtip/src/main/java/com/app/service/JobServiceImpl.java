@@ -1,6 +1,8 @@
 package com.app.service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -17,6 +19,7 @@ import com.app.dto.JobStatusDTO;
 import com.app.pojos.Customer;
 import com.app.pojos.Job;
 import com.app.pojos.JobStatus;
+import com.app.pojos.Skill;
 import com.app.pojos.Tasker;
 
 
@@ -97,5 +100,19 @@ public class JobServiceImpl implements IJobService {
 		mesg.setSubject(subject);
 		mesg.setTo(customer.getEmail());
 		sender.send(mesg);
+	}
+	@Override
+	public List<Job> getPendingJobs(int taskerId) {
+		return jobDao.findPendingTasksByTaskerId(taskerId);
+	}
+
+	@Override
+	public void updateJobStatusAndCost(int jobId) {
+		JobStatusDTO status = new JobStatusDTO(jobId,JobStatus.COMPLETED);
+		updateJobStatus(status);
+		Job job = jobDao.findById(jobId)
+				.orElseThrow(() -> new WrongInputException("Job Id Not Found"));
+		List<Skill> skills = job.getTasker().getServices().stream().filter(t->t.getSkillName().equals(job.getSkillName())).collect(Collectors.toList());
+		job.setCost(job.getStartTime().until(java.time.LocalTime.now(),ChronoUnit.HOURS)*skills.get(0).getRate());
 	}
 }

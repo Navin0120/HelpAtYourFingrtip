@@ -65,4 +65,13 @@ public class JobController {
 		taskerService.updateOverallRating(job.getTasker().getId());
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
+	@GetMapping("/pendingJobs/{taskerId}")
+	public ResponseEntity<?> getJobDetailsofpendingTasks(@PathVariable int taskerId) {
+			return ResponseEntity.ok(jobService.getPendingJobs(taskerId));
+	}
+	@PatchMapping("/updateJobStatusAndCost/{jobId}")
+	public ResponseEntity<?> updateJobStatusAndCost(@PathVariable int jobId) {
+		jobService.updateJobStatusAndCost(jobId);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 }

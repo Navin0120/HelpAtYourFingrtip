@@ -14,4 +14,6 @@ public interface IJobService {
 	Job updateJobPaymentStatus(int jobId);
 	Job updateJobRating(int jobId,int rating);
 	List<Job> getJobByCustomerAndStatus(int custId);
+	List<Job> getPendingJobs(int taskerId);
+	void updateJobStatusAndCost(int jobId);
 }

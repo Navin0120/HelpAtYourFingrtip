@@ -19,4 +19,6 @@ public interface IJobRepository extends JpaRepository<Job, Integer> {
 	int CountRating(int taskerId);
 	@Query("select j from Job j where j.customer.id=?1 and j.jobStatus=?2 and j.paymentStatus=?3")
 	List<Job> getJobDetailsByCustomerAndStatus(int custId,JobStatus status,boolean st);
+	@Query("select j FROM Job j WHERE j.tasker.id=:taskerId AND j.jobStatus= 'PENDING'")
+	List<Job> findPendingTasksByTaskerId(@Param(value="taskerId") int taskerId);
 }
