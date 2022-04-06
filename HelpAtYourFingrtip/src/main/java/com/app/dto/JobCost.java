@@ -1,15 +1,15 @@
 package com.app.dto;
 
-import com.app.pojos.JobStatus;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-public class JobStatusDTO {
+public class JobCost {
 	int jobId;
-	JobStatus status;	
+	double cost;
 }

@@ -1,7 +1,6 @@
 package com.app.pojos;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -64,8 +63,6 @@ public class Job extends BaseEntity{
 	
 	@NotBlank(message = "Job Details can't be blank")
 	private String jobDetails;
-	
-	private LocalTime startTime;
 	
 	private boolean paymentStatus;
 }

@@ -14,7 +14,5 @@ public interface ITaskerService {
 	Tasker getTaskerDetails(int taskerId);
 	List<TaskerDetails> getTaskerDetailsByLocationAndSkill(String location, String skill);
 	void updateOverallRating(int taskerId);
-	Tasker updateTaskerDetails(Tasker tasker,int id);
-	Tasker updateTaskerPassword(String password,int id);
 	public Tasker insertImage(int taskerId, MultipartFile imageFile) throws IOException;
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.dto.JobStatusDTO;
+import com.app.dto.JobCost;
 import com.app.pojos.Job;
 import com.app.service.IJobService;
 import com.app.service.ITaskerService;
@@ -36,15 +36,15 @@ public class JobController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(jobService.insertJobDetails(job,taskerId,custId));
 	}
 	
-	@PatchMapping("/updateJobStatus")
-	public ResponseEntity<?> updateJobStatus(@RequestBody JobStatusDTO status){
-			jobService.updateJobStatus(status);
+	@PatchMapping("/accept/{jobId}")
+	public ResponseEntity<?> updateJobStatusAccept(@PathVariable int jobId){
+			jobService.updateJobStatusAccept(jobId);
 			return ResponseEntity.ok().build();
 	}
 	
-	@PatchMapping("/updateJobStartTime/{jobId}")
-	public ResponseEntity<?> updateJobStartTime(@PathVariable int jobId){
-			jobService.updateJobStartTime(jobId);
+	@PatchMapping("/reject/{jobId}")
+	public ResponseEntity<?> updateJobStatusReject(@PathVariable int jobId){
+			jobService.updateJobStatusReject(jobId);
 			return ResponseEntity.ok().build();
 	}
 	
@@ -69,9 +69,10 @@ public class JobController {
 	public ResponseEntity<?> getJobDetailsofpendingTasks(@PathVariable int taskerId) {
 			return ResponseEntity.ok(jobService.getPendingJobs(taskerId));
 	}
-	@PatchMapping("/updateJobStatusAndCost/{jobId}")
-	public ResponseEntity<?> updateJobStatusAndCost(@PathVariable int jobId) {
-		jobService.updateJobStatusAndCost(jobId);
+	
+	@PatchMapping("/updateJobStatusAndCost")
+	public ResponseEntity<?> updateJobStatusAndCost(@RequestBody JobCost jobcost) {
+		jobService.updateJobStatusAndCost(jobcost);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }

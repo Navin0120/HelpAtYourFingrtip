@@ -1,8 +1,7 @@
 package com.app.service;
 
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import javax.transaction.Transactional;
 
@@ -15,11 +14,10 @@ import com.app.custom_exceptions.WrongInputException;
 import com.app.dao.ICustomerRepository;
 import com.app.dao.IJobRepository;
 import com.app.dao.ITaskerRepository;
-import com.app.dto.JobStatusDTO;
+import com.app.dto.JobCost;
 import com.app.pojos.Customer;
 import com.app.pojos.Job;
 import com.app.pojos.JobStatus;
-import com.app.pojos.Skill;
 import com.app.pojos.Tasker;
 
 
@@ -44,21 +42,21 @@ public class JobServiceImpl implements IJobService {
 	}
 	
 	@Override
-	public void updateJobStatus(JobStatusDTO status) {
-		Job job = jobDao.findById(status.getJobId())
-				.orElseThrow(() -> new WrongInputException("Job Id Not Found"));
-		job.setJobStatus(status.getStatus());
-		if(status.getStatus() == JobStatus.PENDING)
-			sendMail(status.getJobId(),"Task Accepted");
-		if(status.getStatus() == JobStatus.REJECTED)
-			sendMail(status.getJobId(),"Task Rejected");
-	}
-	@Override
-	public void updateJobStartTime(int jobId) {
+	public void updateJobStatusAccept(int jobId) {
 		Job job = jobDao.findById(jobId)
 				.orElseThrow(() -> new WrongInputException("Job Id Not Found"));
-		job.setStartTime(java.time.LocalTime.now());
+		job.setJobStatus(JobStatus.PENDING);
+			sendMail(jobId,"Task Accepted");
 	}
+	
+	@Override
+	public void updateJobStatusReject(int jobId) {
+		Job job = jobDao.findById(jobId)
+				.orElseThrow(() -> new WrongInputException("Job Id Not Found"));
+		job.setJobStatus(JobStatus.REJECTED);
+			sendMail(jobId,"Task Rejected");
+	}
+	
 	@Override
 	public List<Job> getJobByTaskerAndStatus(int taskerId) {
 		return jobDao.findJobsBytaskerIdAndStatus(taskerId);
@@ -97,6 +95,7 @@ public class JobServiceImpl implements IJobService {
 				+"Task Details :"+job.getJobDetails()+"\n"
 				+"Tasker Name:"+tasker.getFirstName()+" "+tasker.getLastName()+"\n"
 				+"Tasker Contact No:"+tasker.getContactNo());
+		System.out.println(customer.getEmail());
 		mesg.setSubject(subject);
 		mesg.setTo(customer.getEmail());
 		sender.send(mesg);
@@ -105,14 +104,12 @@ public class JobServiceImpl implements IJobService {
 	public List<Job> getPendingJobs(int taskerId) {
 		return jobDao.findPendingTasksByTaskerId(taskerId);
 	}
-
+	
 	@Override
-	public void updateJobStatusAndCost(int jobId) {
-		JobStatusDTO status = new JobStatusDTO(jobId,JobStatus.COMPLETED);
-		updateJobStatus(status);
-		Job job = jobDao.findById(jobId)
+	public void updateJobStatusAndCost(JobCost jobcost) {
+		Job job = jobDao.findById(jobcost.getJobId())
 				.orElseThrow(() -> new WrongInputException("Job Id Not Found"));
-		List<Skill> skills = job.getTasker().getServices().stream().filter(t->t.getSkillName().equals(job.getSkillName())).collect(Collectors.toList());
-		job.setCost(job.getStartTime().until(java.time.LocalTime.now(),ChronoUnit.HOURS)*skills.get(0).getRate());
+		job.setJobStatus(JobStatus.COMPLETED);
+		job.setCost(jobcost.getCost());
 	}
 }
