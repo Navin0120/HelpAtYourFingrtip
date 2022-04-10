@@ -1,10 +1,11 @@
 package com.app.service;
 
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -18,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.app.custom_exception.WrongInputException;
 import com.app.dao.IJobRepository;
 import com.app.dao.ITaskerRepository;
-import com.app.dto.TaskerDetails;
 import com.app.pojos.Tasker;
 
 @Service // MANDATORY to tell SC : following is spring bean , containing B.L
@@ -47,20 +47,11 @@ public class TaskerServiceImpl implements ITaskerService {
 					.orElseThrow(() -> new WrongInputException("Tasker with ID " + taskerId + " not found!!!!!!!!!"));
 
 	}
-	@Override
-	public Tasker updateTaskerDetails(Tasker tasker, int Id) {
-		taskerDao.findById(Id).orElseThrow(() -> new WrongInputException("Tasker Id Not Found"));
-		tasker.setId(Id);
-		return taskerDao.save(tasker);
-	}
 	
 	@Override
-	public List<TaskerDetails> getTaskerDetailsByLocationAndSkill(String location, String skill,int page) {
-		List<TaskerDetails> taskersDetails = new ArrayList<>();
-		taskerDao.findByCity(location,PageRequest.of(page, 5, Sort.by(Direction.DESC,"overallRating"))).stream().filter(ser -> ser.isServicePresent(skill))
-				.forEach(tasker -> taskersDetails.add(new TaskerDetails(tasker.getId(),tasker.getFirstName(), tasker.getLastName(),
-						tasker.getContactNo(), tasker.getOverallRating(), tasker.getBio())));
-		return taskersDetails;
+	public List<Tasker> getTaskerDetailsByLocationAndSkill(String location, String skill,int page) {
+		return taskerDao.findByCity(location,PageRequest.of(page, 5, Sort.by(Direction.DESC,"overallRating"))).stream().filter(ser -> ser.isServicePresent(skill))
+				.collect(Collectors.toList());
 	}
 
 	@Override

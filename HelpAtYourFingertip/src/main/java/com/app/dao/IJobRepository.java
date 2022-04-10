@@ -2,9 +2,9 @@ package com.app.dao;
 
 import java.util.List;
 
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,9 +12,9 @@ import com.app.pojos.Job;
 import com.app.pojos.JobStatus;
 
 public interface IJobRepository extends JpaRepository<Job, Integer> {
-	@Modifying
+/*	@Modifying
 	@Query("update Job j set j.jobStatus=:status where j.id=:jobId")
-	int setJobStatus(@Param(value = "status") JobStatus status, @Param(value = "jobId") int jobId);
+	int setJobStatus(@Param(value = "status") JobStatus status, @Param(value = "jobId") int jobId);*/
 
 	@Query("select j FROM Job j WHERE j.tasker.id=:taskerId AND j.jobStatus= 'BOOKED'")
 	List<Job> findJobsBytaskerIdAndStatus(@Param(value = "taskerId") int taskerId,Pageable page);

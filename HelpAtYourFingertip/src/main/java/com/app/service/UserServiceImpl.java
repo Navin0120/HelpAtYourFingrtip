@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.app.dao.ICustomerRepository;
 import com.app.dao.ITaskerRepository;
 import com.app.dao.IUserRepository;
-import com.app.dao.RoleRepository;
+import com.app.dao.IRoleRepository;
 import com.app.dto.CustomerRegDto;
 import com.app.dto.TaskerRegDto;
 import com.app.pojos.Customer;
@@ -27,7 +27,7 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	private IUserRepository userRepo;
 	@Autowired
-	private RoleRepository roleRepo;
+	private IRoleRepository roleRepo;
 	@Autowired
 	private ICustomerRepository custRepo;
 	@Autowired

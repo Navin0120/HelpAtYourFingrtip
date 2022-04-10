@@ -2,6 +2,7 @@ package com.app.service;
 
 import javax.transaction.Transactional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +21,7 @@ public class CustomerServiceImpl implements ICustomerService {
 	public Customer getCustomerDetails(int custId) {
 		return custRepo.findById(custId).orElseThrow(() -> new WrongInputException("Customer Not Found"));
 	}
-
-
-	@Override
-	public Customer updateCustomerDetails(Customer customer, int custId) {
-		custRepo.findById(custId).orElseThrow(() -> new WrongInputException("Customer Id Not Found"));
-		customer.setId(custId);
-		return custRepo.save(customer);
-	}
-
+	
 	@Override
 	public Customer getCustomerFromUserId(int id) {
 		

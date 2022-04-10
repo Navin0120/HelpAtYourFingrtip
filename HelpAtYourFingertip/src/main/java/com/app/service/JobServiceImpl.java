@@ -1,6 +1,7 @@
 package com.app.service;
 
 import java.util.List;
+
 import java.util.concurrent.CompletableFuture;
 
 import javax.transaction.Transactional;
@@ -18,7 +19,6 @@ import com.app.dao.ICustomerRepository;
 import com.app.dao.IJobRepository;
 import com.app.dao.ITaskerRepository;
 import com.app.dto.JobCost;
-import com.app.dto.JobStatusDTO;
 import com.app.pojos.Customer;
 import com.app.pojos.Job;
 import com.app.pojos.JobStatus;
@@ -45,16 +45,6 @@ public class JobServiceImpl implements IJobService {
 		job.setTasker(taskerDao.findById(taskerId)
 				.orElseThrow(() -> new WrongInputException("Tasker Id Not Found")));
 		return jobDao.save(job);
-	}
-	@Override
-	public void updateJobStatus(JobStatusDTO status) {
-		Job job = jobDao.findById(status.getJobId())
-				.orElseThrow(() -> new WrongInputException("Job Id Not Found"));
-		job.setJobStatus(status.getStatus());
-		if(status.getStatus() == JobStatus.PENDING)
-			sendMail(status.getJobId(),"Task Accepted");
-		if(status.getStatus() == JobStatus.REJECTED)
-			sendMail(status.getJobId(),"Task Rejected");
 	}
 	
 	@Override

@@ -33,6 +33,18 @@ public class CustomerRegDto {
 		this.roles = roles;
 	}
 
+	public CustomerRegDto(String email, String password, String firstName, String lastName, String address,
+			String aadharNo, String contactNo) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.aadharNo = aadharNo;
+		this.contactNo = contactNo;
+	}
+	
 	public CustomerRegDto() {
 		super();
 	}

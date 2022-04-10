@@ -48,6 +48,20 @@ public class Customer extends BaseEntity {
 	}
 
 
+	public Customer(@NotBlank(message = "firstname can't be blank") String firstName,
+			@NotBlank(message = "lastName can't be blank") String lastName, String address,
+			@NotBlank(message = "AadharCard No can't be blank") @Pattern(regexp = "(\\d{12})", message = "invalid aadhar card no") String aadharNo,
+			@NotBlank(message = "contactNo can't be blank") @Pattern(regexp = "(\\d{10})", message = "invalid contact no") String contactNo) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.aadharNo = aadharNo;
+		this.contactNo = contactNo;
+	}
+
+
+
 	public Customer(User customer, @NotBlank(message = "firstname can't be blank") String firstName,
 			@NotBlank(message = "lastName can't be blank") String lastName, String address,
 			@NotBlank(message = "AadharCard No can't be blank") @Pattern(regexp = "(\\d{12})", message = "invalid aadhar card no") String aadharNo,
