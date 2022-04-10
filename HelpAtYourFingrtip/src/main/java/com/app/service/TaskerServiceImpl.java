@@ -65,20 +65,6 @@ public class TaskerServiceImpl implements ITaskerService {
 		Tasker tasker = taskerDao.findById(taskerId).orElseThrow(() -> new WrongInputException("Tasker Id not found"));
 		tasker.setOverallRating(overallRating);
 	}
-
-	@Override
-	public Tasker updateTaskerDetails(Tasker tasker, int Id) {
-		taskerDao.findById(Id).orElseThrow(() -> new WrongInputException("Tasker Id Not Found"));
-		tasker.setId(Id);
-		return taskerDao.save(tasker);
-	}
-
-	@Override
-	public Tasker updateTaskerPassword(String password, int id) {
-		Tasker tasker = taskerDao.findById(id).orElseThrow(() -> new WrongInputException("Tasker Id Not Found"));
-		tasker.setPassword(password);
-		return taskerDao.save(tasker);
-	}
 	@Override
 	public Tasker insertImage(int taskerId, MultipartFile imageFile) throws IOException {
 		Tasker tasker=taskerDao.findById(taskerId).orElseThrow(()->new RuntimeException("wrong id"));
