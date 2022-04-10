@@ -2,10 +2,12 @@ package com.app.service;
 
 import java.util.List;
 
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -77,8 +79,8 @@ public class JobServiceImpl implements IJobService {
 		
 	}
 	@Override
-	public List<Job> getJobByCustomerAndStatus(int custId) {
-		return jobDao.getJobDetailsByCustomerAndStatus(custId,JobStatus.COMPLETED,false);
+	public List<Job> getJobByCustomerAndStatus(int custId,int page) {
+		return jobDao.getJobDetailsByCustomerAndStatus(custId,JobStatus.COMPLETED,false,PageRequest.of(page, 5, Sort.by(Direction.DESC,"jobDate")));
 	}
 	
 	public void sendMail(int jobId,String subject)
@@ -112,4 +114,6 @@ public class JobServiceImpl implements IJobService {
 		job.setJobStatus(JobStatus.COMPLETED);
 		job.setCost(jobcost.getCost());
 	}
+	
+	
 }

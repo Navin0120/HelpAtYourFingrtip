@@ -2,11 +2,10 @@ package com.app.controller;
 
 import java.io.IOException;
 
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import javax.servlet.http.HttpSession;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,22 +41,6 @@ public class TaskerController {
 			@PathVariable String skill) {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(taskerService.getTaskerDetailsByLocationAndSkill(location, skill));
-	}
-	
-	@PostMapping("/register")
-	public ResponseEntity<?> addNewTasker(@RequestBody Tasker tasker){ //@RequestBody --> Json -> Java
-		return ResponseEntity.status(HttpStatus.CREATED).body(taskerService.insertTaskerDetails(tasker));
-	}
-	@PostMapping("/login")
-	public ResponseEntity<?> processTaskerLoginForm(@RequestBody Tasker tasker,
-													HttpSession session){
-		Tasker task =  taskerService.authenticateTasker(tasker.getEmail(), tasker.getPassword()); 
-		session.setAttribute("tasker_details", task);// store it under session scope (till logout)
-		return ResponseEntity.ok().body(task);
-	}
-	@GetMapping("/{taskerId}")
-	public ResponseEntity<?> getTaskerDetails(@PathVariable int taskerId) {
-			return ResponseEntity.ok(taskerService.getTaskerDetails(taskerId));
 	}
 	
 	@GetMapping("/image/{taskerId}")
