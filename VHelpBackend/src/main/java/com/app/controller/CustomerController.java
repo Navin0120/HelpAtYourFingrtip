@@ -105,7 +105,7 @@ public class CustomerController {
 		JSONObject obj = new JSONObject();
 		obj.put("amount", job.getCost()*100); //Cost in paise
 		obj.put("currency", "INR");
-		obj.put("receipt", "tx_123");
+		obj.put("receipt", "tx_"+job.getId());
 		Order order = client.Orders.create(obj);
 		if(order.get("status").equals("created"))
 		System.out.println(order);
